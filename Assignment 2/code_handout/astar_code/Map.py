@@ -228,7 +228,7 @@ class Map_Obj():
             ' : ': (96, 96, 96),
             ' ; ': (36, 36, 36),
             ' S ': (255, 0, 255),
-            ' G ': (0, 128, 255)
+            ' G ': (0, 128, 255),
         }
         # Go through image and set pixel color for every position
         for y in range(height):
