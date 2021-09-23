@@ -1,12 +1,10 @@
-# Credit for this: Nicholas Swift
-# as found at https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
-from warnings import warn
 import heapq
 import Map
 
+
 class Node:
     """
-    A node class for A* Pathfinding
+    A node class for A* search algorithm
     """
 
     def __init__(self, parent=None, position=None):
@@ -18,12 +16,10 @@ class Node:
         self.h = 0
         self.f = 0
 
+    # defining equal for purposes of heap queue
     def __eq__(self, other):
         return self.position == other.position
     
-    def __repr__(self):
-      return f"{self.position}"
-
     # defining less than for purposes of heap queue
     def __lt__(self, other):
       return self.f < other.f
@@ -40,16 +36,10 @@ def return_path(current_node):
         current = current.parent
     return path[::-1]  # Return reversed path
 
-
 def astar(map, start, end):
     """
-    Returns a list of tuples as a path from the given start to the given end in the given maze
-    :param maze:
-    :param start:
-    :param end:
-    :return:
+    Returns a list of cells as a path from the given start to the given end in the given Samfundet map
     """
-
     # Create start and end node
     start_node = Node(None, start)
     start_node.g = start_node.h = start_node.f = 0
@@ -60,7 +50,7 @@ def astar(map, start, end):
     open_list = []
     closed_list = []
 
-    # Heapify the open_list and Add the start node
+    # Heapify the open_list and add the start node
     heapq.heapify(open_list) 
     heapq.heappush(open_list, start_node)
     
@@ -74,7 +64,7 @@ def astar(map, start, end):
         if current_node == end_node:
             return return_path(current_node)
 
-        # what squares do we search
+        # what squares do we search (no diagonals)
         (x,y) = current_node.position
         neighbors = ([x-1, y], [x+1, y], [x, y-1], [x, y+1])
         current_node.neighbors = neighbors
@@ -86,13 +76,15 @@ def astar(map, start, end):
             # Check if the node is a wall
             if(map_value == ' # '):
                 continue
+
             # Create a neighbor node
             neighbor = Node(current_node, next)
 
             # Check if the neighbor is in the closed list
             if (neighbor in closed_list):
                 continue
-            # Generate heuristics (Manhattan distance)
+            
+            # Generate g(n) and h(n)(Manhattan distance)
             if (map_value == " . "):
                 temp_g = current_node.g + 1
             elif (map_value == " , "):
@@ -119,7 +111,7 @@ def astar(map, start, end):
                 neighbor.parent = current_node
 
                 if add_to_open(open_list, neighbor):
-                # Everything is green, add neighbor to open list
+                    # Add neighbor to open list
                     heapq.heappush(open_list, neighbor)
     
     # Return None, no path is found
@@ -132,7 +124,7 @@ def add_to_open(open_list, neighbor):
             return False
     return True
 
-
+# Draw the result path in the string map
 def draw_path(map, path):
     for step in path:
         map[step[0]][step[1]] = ' X '
@@ -146,9 +138,7 @@ def main():
     end = map_obj.get_end_goal_pos()
 
     path = astar(string_map, start, end)
-    print(len(path))
     map_obj.show_map(draw_path(string_map, path))
     
-
 if __name__ == '__main__':
     main()
