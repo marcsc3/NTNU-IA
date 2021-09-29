@@ -91,7 +91,7 @@ def astar(map, start, end):
 
             # Check if neighbor is in open list and if it has a lower f value
             if(add_to_open(open_list, neighbor) == True):
-                # Everything is green, add neighbor to open list
+                # Add neighbor to open list
                 heapq.heappush(open_list, neighbor)
 
     # Return None, no path is found
@@ -119,6 +119,7 @@ def main():
     end = map_obj.get_end_goal_pos()
 
     path = astar(string_map, start, end)
+    
     map_obj.show_map(draw_path(string_map, path))
     
 

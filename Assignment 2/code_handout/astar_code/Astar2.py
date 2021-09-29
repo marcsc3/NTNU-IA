@@ -84,7 +84,7 @@ def astar(map, start, end):
             if (neighbor in closed_list):
                 continue
             
-            # Generate g(n) and h(n)(Manhattan distance)
+            # Generate temporal g(n), keeping in mind the cells weight 
             if (map_value == " . "):
                 temp_g = current_node.g + 1
             elif (map_value == " , "):
@@ -96,15 +96,20 @@ def astar(map, start, end):
             
             control_flag = 0
             for k in range(len(open_list)):
+                # Neighbor is in the open list
                 if neighbor.position == open_list[k].position:
+                    # Update g(n) if it's less cost
                     if temp_g < open_list[k].g:
+                        # Generate g(n) and h(n)(Manhattan distance)
                         open_list[k].g = temp_g
                         open_list[k].h= abs(open_list[k].position[0] - end_node.position[0]) + abs(open_list[k].position[1] - end_node.position[1])
                         open_list[k].f = open_list[k].g + open_list[k].h
                         open_list[k].parent = current_node
                     control_flag = 1
 
+            # Neighbor not in the open list
             if control_flag != 1:
+                # Generate g(n)and h(n)(Manhattan distance)
                 neighbor.g = temp_g
                 neighbor.h = abs(neighbor.position[0] - end_node.position[0]) + abs(neighbor.position[1] - end_node.position[1])
                 neighbor.f = neighbor.g + neighbor.h
